@@ -18,10 +18,10 @@ include "includes/headerProfe.php";
                     ¡Bienvenidos a su plataforma de calificaciones escolares! Aquí podrán consultar su progreso académico, mantenerse informados y alcanzar sus metas con éxito. ¡El futuro está en sus manos!
                 </p>
                 <div class="space-x-4">
-                    <a href="/pages/registroAsistencias.php" class="bg-academia-blue text-white px-6 py-3 rounded hover:bg-academia-light transition">
+                    <a href="<?php echo BASE_URL; ?>src/Pages/registroAsistenciasProfe.php" class="bg-academia-blue text-white px-6 py-3 rounded hover:bg-academia-light transition">
                         Asistencia
                     </a>
-                    <a href="/pages/registroCalificaciones.php" class="border border-academia-blue text-academia-blue px-6 py-3 rounded hover:bg-gray-100 transition">
+                    <a href="<?php echo BASE_URL; ?>src/Pages/registroCalificacionesProfe.php" class="border border-academia-blue text-academia-blue px-6 py-3 rounded hover:bg-gray-100 transition">
                         Calificaciones
                     </a>
                 </div>
@@ -39,21 +39,21 @@ include "includes/headerProfe.php";
         <div class="container mx-auto px-4 flex flex-col items-center">
             <h2 class="text-4xl font-bold text-center text-gray-800 mb-12">Gestionar</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-                <a href="/pages/gestionCursoPrfe.php" class="bg-white p-8 rounded-lg shadow-lg block hover:bg-gray-200 transition duration-300">
+                <a href="<?php echo BASE_URL; ?>src/Pages/gestionCursoPrfe.php" class="bg-white p-8 rounded-lg shadow-lg block hover:bg-gray-200 transition duration-300">
                     <div class="flex justify-center mb-6">
                         <img src="/public/img/curso.png" alt="curso" class="w-32 h-32">
                     </div>
                     <h3 class="text-2xl font-semibold text-center mb-2">Gestión de cursos</h3>
                     <p class="text-gray-600 text-center">Lista, creación, asignación de profesores y horarios.</p>
                 </a>
-                <a href="/pages/registroCalificaciones.php" class="bg-white p-8 rounded-lg shadow-lg block hover:bg-gray-200 transition duration-300">
+                <a href="<?php echo BASE_URL; ?>src/Pages/registroCalificacionesProfe.php" class="bg-white p-8 rounded-lg shadow-lg block hover:bg-gray-200 transition duration-300">
                     <div class="flex justify-center mb-6">
                         <img src="/public/img/10.png" alt="EOI" class="w-32 h-32">
                     </div>
                     <h3 class="text-2xl font-semibold text-center mb-2">Registro de Calificaciones</h3>
                     <p class="text-gray-600 text-center">Ingreso, consulta y actualización.</p>
                 </a>
-                <a href="/pages/registroAsistencias.php" class="bg-white p-8 rounded-lg shadow-lg block hover:bg-gray-200 transition duration-300">
+                <a href="<?php echo BASE_URL; ?>src/Pages/registroAsistenciasProfe.php" class="bg-white p-8 rounded-lg shadow-lg block hover:bg-gray-200 transition duration-300">
                     <div class="flex justify-center mb-6">
                         <img src="/public/img/asistencia.png" alt="Aptis" class="w-32 h-32">
                     </div>

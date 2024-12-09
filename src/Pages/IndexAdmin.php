@@ -32,42 +32,42 @@ include "includes/headerAdmin.php";
     <div class="container mx-auto px-4">
         <h2 class="text-4xl font-bold text-center text-gray-800 mb-12">Gestionar</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            <a href="/pages/gestionEstudiantes.php" class="bg-white p-8 rounded-lg shadow-lg block hover:bg-gray-200 transition duration-300">
+            <a href="<?php echo BASE_URL; ?>src/Pages/gestionEstudiantes.php" class="bg-white p-8 rounded-lg shadow-lg block hover:bg-gray-200 transition duration-300">
                 <div class="flex justify-center mb-6">
                     <img src="/public/img/students.png" alt="estudiante" class="w-32 h-32">
                 </div>
                 <h3 class="text-2xl font-semibold text-center mb-2">Gestión de estudiantes</h3>
                 <p class="text-gray-600 text-center">Lista, registro, edición y eliminación</p>
             </a>
-            <a href="/pages/gestionCursos.php" class="bg-white p-8 rounded-lg shadow-lg block hover:bg-gray-200 transition duration-300">
+            <a href="<?php echo BASE_URL; ?>src/Pages/gestionCursos.php" class="bg-white p-8 rounded-lg shadow-lg block hover:bg-gray-200 transition duration-300">
                 <div class="flex justify-center mb-6">
                     <img src="/public/img/curso.png" alt="curso" class="w-32 h-32">
                 </div>
                 <h3 class="text-2xl font-semibold text-center mb-2">Gestión de cursos</h3>
                 <p class="text-gray-600 text-center">Lista, creación, asignación de profesores y horarios.</p>
             </a>
-            <a href="/pages/registroCalificaciones.php" class="bg-white p-8 rounded-lg shadow-lg block hover:bg-gray-200 transition duration-300">
+            <a href="<?php echo BASE_URL; ?>src/Pages/registroCalificaciones.php" class="bg-white p-8 rounded-lg shadow-lg block hover:bg-gray-200 transition duration-300">
                 <div class="flex justify-center mb-6">
                     <img src="/public/img/10.png" alt="EOI" class="w-32 h-32">
                 </div>
                 <h3 class="text-2xl font-semibold text-center mb-2">Registro de Calificaciones</h3>
                 <p class="text-gray-600 text-center">Ingreso, consulta y actualización.</p>
             </a>
-            <a href="/pages/registroAsistencias.php" class="bg-white p-8 rounded-lg shadow-lg block hover:bg-gray-200 transition duration-300">
+            <a href="<?php echo BASE_URL; ?>src/Pages/registroAsistencias.php" class="bg-white p-8 rounded-lg shadow-lg block hover:bg-gray-200 transition duration-300">
                 <div class="flex justify-center mb-6">
                     <img src="/public/img/asistencia.png" alt="Aptis" class="w-32 h-32">
                 </div>
                 <h3 class="text-2xl font-semibold text-center mb-2">Registro de asistencia</h3>
                 <p class="text-gray-600 text-center">Registro, consulta y actualización</p>
             </a>
-            <a href="/pages/generacionReportes.php" class="bg-white p-8 rounded-lg shadow-lg block hover:bg-gray-200 transition duration-300">
+            <a href="<?php echo BASE_URL; ?>src/Pages/generacionReportes.php" class="bg-white p-8 rounded-lg shadow-lg block hover:bg-gray-200 transition duration-300">
                 <div class="flex justify-center mb-6">
                     <img src="/public/img/reporte.png" alt="EOI" class="w-32 h-32">
                 </div>
                 <h3 class="text-2xl font-semibold text-center mb-2">Generación de reportes</h3>
                 <p class="text-gray-600 text-center">Académicos y administrativos.</p>
             </a>
-            <a href="/pages/gestionProfesores.php" class="bg-white p-8 rounded-lg shadow-lg block hover:bg-gray-200 transition duration-300">
+            <a href="<?php echo BASE_URL; ?>src/Pages/gestionProfesores.php" class="bg-white p-8 rounded-lg shadow-lg block hover:bg-gray-200 transition duration-300">
                 <div class="flex justify-center mb-6">
                     <img src="/public/img/profe.png" alt="Aptis" class="w-32 h-32">
                 </div>
