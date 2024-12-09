@@ -2,7 +2,7 @@
 include "../../config/db.php";
 include "../../Config/config.php";
 
-    if(isset($_POST['editCurso'])){
+    if(isset($_POST['editCurso'])){ 
         $id = $_POST['id'];
         $nombre = $_POST['nombre'];
         $descripcion = $_POST['descripcion'];

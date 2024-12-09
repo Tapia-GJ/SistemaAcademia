@@ -52,10 +52,12 @@ $action = $_GET['action'] ?? 'list_grades';
                 <table class="w-full">
                     <thead class="bg-gray-200">
                         <tr>
+                            <th class="px-4 py-2 text-left">id</th>
                             <th class="px-4 py-2 text-left">Curso</th>
                             <th class="px-4 py-2 text-left">Estudiante</th>
                             <th class="px-4 py-2 text-left">Nota Final</th>
                             <th class="px-4 py-2 text-left">Estatus</th>
+                            <th class="px-4 py-2 text-left">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -66,6 +68,7 @@ $action = $_GET['action'] ?? 'list_grades';
                             $estatus = $fila["Calificacion"] >= 7 ? 'Aprobado' : 'Reprobado';
                             ?>
                             <tr class="border-b hover:bg-gray-50">
+                                <td class="px-4 py-2"><?php echo $fila['Id_Calificaciones'] ?></td>
                                 <td class="px-4 py-2"><?php echo $fila['Nombre_Cursos'] ?></td>
                                 <td class="px-4 py-2"><?= $fila['Nombre_Estudiantes'] ?>         <?= $fila['Apellido_Estudiantes'] ?></td>
                                 <td class="px-4 py-2"><?php echo $fila['Calificacion'] ?></td>
@@ -74,6 +77,19 @@ $action = $_GET['action'] ?? 'list_grades';
                                         <?= $estatus ?>
                                     </span>
                                 </td>
+                                <td class="px-4 py-2 text-center">
+                                <div class="flex justify-center space-x-2">
+                                    <a href="?action=editCali&id=<?= $fila['Id_Calificaciones'] ?>"
+                                        class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                                        Editar
+                                    </a>
+                                    <a href="<?php echo BASE_URL; ?>src/Calificaciones/deleteCali.php?id=<?= $fila['Id_Calificaciones'] ?>"
+                                        onclick="return confirm('¿Estás seguro?')"
+                                        class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                                        Eliminar
+                                    </a>
+                                </div>
+                            </td>
 
                             </tr>
                         <?php endforeach; ?>
@@ -132,7 +148,68 @@ $action = $_GET['action'] ?? 'list_grades';
                 </form>
             </div>
 
-
+        <?php elseif ($action === 'editCali'): ?>
+            <!-- Formulario de Edición de Curso -->
+        <?php
+        $id = $_GET['id'];
+        $query = "SELECT t1.*, t2.*, t3.* FROM calificaciones as t1 INNER JOIN cursos as t2 on t1.Cursos_Id_Cursos = t2.Id_Cursos INNER JOIN estudiantes as t3 on t1.Estudiantes_Id_Estudiantes = t3.Id_Estudiantes WHERE Id_Calificaciones = $id";
+        $result = mysqli_query($conn, $query);
+        $cali = mysqli_fetch_array($result);
+        if (!$cali): ?>
+            <p class="text-red-500">calificacion no encontrado.</p>
+            <a href="?action=list_grades" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                Volver
+            </a>
+        <?php else: ?>
+            <div class="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
+                <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">Editar Calificación</h2>
+                <form method="POST" action="<?php echo BASE_URL; ?>src/Calificaciones/editCali.php" class="space-y-4">
+                    <input type="hidden" name="id" value="<?= $id ?>">    
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Curso</label>
+                        <select name="curso_id" required 
+                            class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <option value="<?= $cali['Id_Cursos'] ?>"><?= $cali['Nombre_Cursos'] ?></option>
+                            <?php
+                            $query = "SELECT * FROM `calificaciones`";
+                            $result = mysqli_query($conn, $query);
+                            foreach ($result as $curso):
+                                ?>
+                                <option value="<?= $curso['Id_Cursos'] ?>"><?= $curso['Nombre_Cursos'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Estudiante</label>
+                        <select name="estudiante_id" required
+                            class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <option value="<?=$cali['Id_Estudiantes']?>"><?=$cali['Nombre_Estudiantes']?></option>
+                            <?php
+                        $query = "SELECT * FROM `estudiantes`";
+                        $result = mysqli_query($conn, $query);
+                        foreach ($result as $curso):
+                        ?>
+                        <option value="<?=$curso['Id_Estudiantes']?>"><?=$curso['Nombre_Estudiantes']?></option>
+                        <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Nota Final</label>
+                        <input type="number" name="calificacion" value="<?= $cali['Calificacion'] ?>" step="0.1" required min="0" max="10"
+                            class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="">
+                    </div>
+                    <div class="flex justify-between">
+                        <a href="?action=list_grades" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                            Cancelar
+                        </a>
+                        <button type="submit" name="editCali" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                            Guardar Calificación
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <?php endif; ?>
         <?php endif; ?>
     </div>
 </div>
