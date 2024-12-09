@@ -1,18 +1,8 @@
 <?php
-// Configuración de base de datos y lógica (simulada para el ejemplo)
-$courses = [
-    ['id' => 1, 'nombre' => 'Introducción a la Programación', 'codigo' => 'SIS101', 'creditos' => 4, 'carrera' => 'Sistemas'],
-    ['id' => 2, 'nombre' => 'Derecho Constitucional', 'codigo' => 'DER201', 'creditos' => 3, 'carrera' => 'Derecho']
-];
+include "../../config/db.php";
+include "includes/headerProfe.php";
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Gestión de Cursos - Academia Excelencia</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 min-h-screen">
+
     <div class="container mx-auto p-6">
         <!-- Vista de Lista de Cursos -->
         <div class="bg-white shadow-md rounded-lg">
@@ -22,21 +12,21 @@ $courses = [
             <table class="w-full">
                 <thead class="bg-gray-200">
                     <tr>
-                        <th class="px-4 py-2 text-left">ID</th>
-                        <th class="px-4 py-2 text-left">Código</th>
-                        <th class="px-4 py-2 text-left">Nombre</th>
-                        <th class="px-4 py-2 text-left">Créditos</th>
-                        <th class="px-4 py-2 text-left">Carrera</th>
+                        <th class="px-4 py-2 text-left">Curso</th>
+                        <th class="px-4 py-2 text-left">Profesor</th>
+                        <th class="px-4 py-2 text-left">Creditos</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($courses as $course): ?>
+                    <?php 
+                    $query = "SELECT t1.*, t2.*, t3.* FROM `profesores_cursos` as t1 INNER JOIN profesores as t2 on t1.Profesores_Id_Profesores = t2.Id_Profesores INNER JOIN cursos as t3 on t3.Id_Cursos = t1.Cursos_Id_Cursos;";
+                    $result = mysqli_query($conn, $query);
+
+                    foreach ($result as $course): ?>
                         <tr class="border-b hover:bg-gray-50">
-                            <td class="px-4 py-2"><?= $course['id'] ?></td>
-                            <td class="px-4 py-2"><?= $course['codigo'] ?></td>
-                            <td class="px-4 py-2"><?= $course['nombre'] ?></td>
-                            <td class="px-4 py-2"><?= $course['creditos'] ?></td>
-                            <td class="px-4 py-2"><?= $course['carrera'] ?></td>
+                            <td class="px-4 py-2"><?= $course['Nombre_Cursos'] ?></td>
+                            <td class="px-4 py-2"><?= $course['Nombre_Profesores']. ' '.$course['Apellido_Profesores'] ?></td>
+                            <td class="px-4 py-2"><?= $course['Creditos'] ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

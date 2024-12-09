@@ -1,54 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil - Academia Excelencia</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'academia-blue': '#1E40AF',
-                        'academia-light': '#3B82F6',
-                    }
-                }
-            }
-        }
-    </script>
-</head>
-<body>
-
-
-<nav class="bg-academia-blue text-white p-4 shadow-md">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-2xl font-bold">
-                Academia Excelencia
-            </div>
-            <div class="space-x-4">
-                <a href="/pages/indexAlum.php" class="hover:bg-academia-light px-3 py-2 rounded transition">
-                    Inicio 
-                </a>
-                <a href="######" class="hover:bg-academia-light px-3 py-2 rounded transition">
-                    Calificaciones
-                </a>
-            </div>
-        </div>
-    </nav>
-
-
+<?php
+include "../../config/db.php";
+include "includes/headerAlum.php";
+?>
     <!-- --perfil -->
+                <?php
+                $user = $_SESSION["username"];
+                    $query = "SELECT t1.*, t2.* FROM `usuarios` as t1 INNER JOIN estudiantes as t2 ON t1.Estudiantes_Id = t2.Id_Estudiantes WHERE t1.Nombre_Usuarios = '$user';";
+                    $result = mysqli_query($conn, $query);
+                    $row = mysqli_fetch_array($result);
+                ?>
                 <div class="flex items-center justify-center min-h-screen bg-gray-100">
                 <div class="bg-white max-w-2xl shadow overflow-hidden sm:rounded-lg">
-                    <div class="px-4 py-5 sm:px-6">
+                    <!-- <div class="px-4 py-5 sm:px-6">
                         <h3 class="text-lg leading-6 font-medium text-gray-900">
                             xxxxxxxxxxxx
                         </h3>
                         <p class="mt-1 max-w-2xl text-sm text-gray-500">
                             Excelencia Academica
                         </p>
-                    </div>
+                    </div> -->
                     <div class="border-t border-gray-200">
                         <dl>
                             <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -56,7 +26,7 @@
                                     Nombre
                                 </dt>
                                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    xxxxxxxxxx
+                                <?= $row["Nombre_Estudiantes"] ?>
                                 </dd>
                             </div>
                             <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -64,7 +34,7 @@
                                     Apellidos
                                 </dt>
                                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    xxxxxxxxxxxx
+                                <?= $row["Apellido_Estudiantes"] ?>
                                 </dd>
                             </div>
                             <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -72,7 +42,7 @@
                                     Fecha de nacimiento
                                 </dt>
                                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    xx-xx-xxxx
+                                <?= $row["Fecha_Nacimiento"] ?>
                                 </dd>
                             </div>
                             <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -80,7 +50,7 @@
                                     Correo
                                 </dt>
                                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    xxxxx@xxxxxxx.xxxx
+                                <?= $row["Correo_Estudiantes"] ?>
                                 </dd>
                             </div>
                             <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -88,7 +58,7 @@
                                     Telefono
                                 </dt>
                                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    +12 34 5678 9012
+                                    +52 <?= $row["Telefono_Estudiantes"] ?>
                                 </dd>
                             </div>
                             <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -96,7 +66,7 @@
                                     Direccion
                                 </dt>
                                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    xxxxxxxxxxxxxxxxxx
+                                <?= $row["Direccion"] ?>
                                 </dd>
                             </div>
                             <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -104,7 +74,7 @@
                                     Fecha de ingreso
                                 </dt>
                                 <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                    xx-xx-xxxx
+                                <?= $row["Fecha_Registro"] ?>
                                 </dd>
                             </div>
                         </dl>

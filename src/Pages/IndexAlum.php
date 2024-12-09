@@ -1,48 +1,7 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Estudiantes - Academia Excelencia</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'academia-blue': '#1E40AF',
-                        'academia-light': '#3B82F6',
-                    }
-                }
-            }
-        }
-    </script>
-</head>
-
-<body class="bg-gray-50">
-    <!-- Navbar -->
-    <nav class="bg-academia-blue text-white p-4 shadow-md">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-2xl font-bold">
-                Academia Excelencia
-            </div>
-            <div class="space-x-4">
-                <a href="/pages/Perfil.php" class="hover:bg-academia-light px-3 py-2 rounded transition">
-                    Perfil académico 
-                </a>
-                <a href="/pages/BoletaCali.php" class="hover:bg-academia-light px-3 py-2 rounded transition">
-                    Calificaciones
-                </a>
-                <form action="/logout.php" method="POST" class="inline">
-                    <button type="submit" class="bg-red-500 hover:bg-red-600 px-3 py-2 rounded transition">
-                        Cerrar sesión
-                    </button>
-                </form>
-            </div>
-        </div>
-    </nav>
-
+<?php
+include "../../config/db.php";
+include "includes/headerAlum.php";
+?>
     <!-- Hero Section -->
     <section class="container mx-auto mt-10 px-4">
         <div class="grid md:grid-cols-2 gap-8 items-center">
@@ -54,10 +13,10 @@
                 ¡Bienvenidos a su plataforma de calificaciones escolares! Aquí podrán consultar su progreso académico, mantenerse informados y alcanzar sus metas con éxito. ¡El futuro está en sus manos!
                 </p>
                 <div class="space-x-4">
-                    <a href="/pages/Perfil.php" class="bg-academia-blue text-white px-6 py-3 rounded hover:bg-academia-light transition">
+                    <a href="<?php echo BASE_URL; ?>src/Pages/Perfil.php" class="bg-academia-blue text-white px-6 py-3 rounded hover:bg-academia-light transition">
                         Ver Perfil
                     </a>
-                    <a href="/pages/BoletaCali.php" class="border border-academia-blue text-academia-blue px-6 py-3 rounded hover:bg-gray-100 transition">
+                    <a href="<?php echo BASE_URL; ?>src/Pages/BoletaCali.php" class="border border-academia-blue text-academia-blue px-6 py-3 rounded hover:bg-gray-100 transition">
                         Calificaciones
                     </a>
                 </div>
