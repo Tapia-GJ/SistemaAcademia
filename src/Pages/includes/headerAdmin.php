@@ -1,3 +1,4 @@
+<?php include "../../Config/config.php"; ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -27,26 +28,32 @@
     <nav class="bg-academia-blue text-white p-4 shadow-md">
         <div class="container mx-auto flex justify-between items-center">
             <div class="text-2xl font-bold">
-                Academia Excelencia
+            <a href="<?php echo BASE_URL; ?>index.php" class=" px-2 py-2 rounded transition">
+            Academia Excelencia
+                </a>
+                
             </div>
-            <div class="space-x-4">
-                <a href="/pages/gestionEstudiantes.php" class="hover:bg-academia-light px-3 py-2 rounded transition">
+            <div class="space-x-2">
+                <a href="<?php echo BASE_URL; ?>src/Pages/gestionEstudiantes.php" class="hover:bg-academia-light px-2 py-2 rounded transition">
                     Gestión de Estudiantes
                 </a>
-                <a href="/pages/gestionCursos.php" class="hover:bg-academia-light px-3 py-2 rounded transition">
+                <a href="<?php echo BASE_URL; ?>src/Pages/gestionCursos.php" class="hover:bg-academia-light px-2 py-2 rounded transition">
                     Gestión de Cursos
                 </a>
-                <a href="/pages/registroCalificaciones.php" class="hover:bg-academia-light px-3 py-2 rounded transition">
+                <a href="<?php echo BASE_URL; ?>src/Pages/registroCalificaciones.php" class="hover:bg-academia-light px-2 py-2 rounded transition">
                     Registro de Calificaciones
                 </a>
-                <a href="/pages/registroAsistencias.php" class="hover:bg-academia-light px-3 py-2 rounded transition">
+                <a href="<?php echo BASE_URL; ?>src/Pages/registroAsistencias.php" class="hover:bg-academia-light px-2 py-2 rounded transition">
                     Registro de Asistencia
                 </a>
-                <a href="/pages/generacionReportes.php" class="hover:bg-academia-light px-3 py-2 rounded transition">
+                <a href="<?php echo BASE_URL; ?>src/Pages/generacionReportes.php" class="hover:bg-academia-light px-2 py-2 rounded transition">
                     Generación de Reportes
                 </a>
-                <a href="/pages/gestionProfesores.php" class="hover:bg-academia-light px-3 py-2 rounded transition">
+                <a href="<?php echo BASE_URL; ?>src/Pages/gestionProfesores.php" class="hover:bg-academia-light px-2 py-2 rounded transition">
                     Gestión de profesores
+                </a>
+                <a href="<?php echo BASE_URL; ?>logout.php" class="hover:bg-academia-light px-3 py-2 rounded transition">
+                    Cerrar sesión
                 </a>
             </div>
         </div>

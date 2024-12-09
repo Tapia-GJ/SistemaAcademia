@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($password === $user['Contrasena_Usuarios']) {
             $_SESSION['username'] = $user['Nombre_Usuarios'];
             $_SESSION['rol'] = $user['Roles_Id_Roles'];
-            header('Location: ../index.php'); // Redirige después del login
+            header('Location: ../index.php'); 
             exit;
         } else {
             $_SESSION['mensaje'] = "Contraseña o usuario incorrecto.";

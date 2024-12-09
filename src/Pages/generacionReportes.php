@@ -1,22 +1,33 @@
 <?php
-// Configuración de base de datos y lógica (simulada para el ejemplo)
-$students = [
-    ['id' => 1, 'nombre' => 'Juan', 'apellido' => 'Pérez', 'email' => 'juan@example.com', 'carrera' => 'Sistemas', 'fecha_nacimiento' => '2000-01-15'],
-    ['id' => 2, 'nombre' => 'María', 'apellido' => 'García', 'email' => 'maria@example.com', 'carrera' => 'Derecho', 'fecha_nacimiento' => '1999-05-20']
-];
+include("../../config/db.php");
+include("includes/headerAdmin.php");
 
-// Funciones de generación de reportes
+// Función para obtener estudiantes desde la base de datos
+function getStudents($conn)
+{
+    $query = "SELECT * FROM estudiantes";
+    $result = mysqli_query($conn, $query);
+
+    if (!$result) {
+        die("Error al obtener estudiantes.");
+    }
+
+    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
+
+// Funciones para generar reportes
 function generateAcademicReport($students)
 {
     // Informe de distribución de carreras
-    $careerDistribution = array_count_values(array_column($students, 'carrera'));
+    $careerDistribution = array_count_values(array_column($students, 'Carrera'));
 
     // Cálculo de edad promedio
     $currentYear = date('Y');
     $ages = array_map(function ($student) use ($currentYear) {
-        return $currentYear - date('Y', strtotime($student['fecha_nacimiento']));
+        return $currentYear - date('Y', strtotime($student['Fecha_Nacimiento']));
     }, $students);
-    $averageAge = round(array_sum($ages) / count($ages), 2);
+
+    $averageAge = count($ages) > 0 ? round(array_sum($ages) / count($ages), 2) : 0;
 
     return [
         'total_students' => count($students),
@@ -37,7 +48,7 @@ function generateAdministrativeReport($students)
 
     $currentYear = date('Y');
     foreach ($students as $student) {
-        $age = $currentYear - date('Y', strtotime($student['fecha_nacimiento']));
+        $age = $currentYear - date('Y', strtotime($student['Fecha_Nacimiento']));
 
         if ($age >= 18 && $age <= 21) {
             $ageGroups['18-21']++;
@@ -55,285 +66,127 @@ function generateAdministrativeReport($students)
     ];
 }
 
-// Procesamiento de formularios
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = $_GET['action'] ?? '';
-
-    if ($action === 'create') {
-        // Lógica de creación de estudiante (simulada)
-        $newStudent = [
-            'id' => count($students) + 1,
-            'nombre' => $_POST['nombre'],
-            'apellido' => $_POST['apellido'],
-            'email' => $_POST['email'],
-            'carrera' => $_POST['carrera'],
-            'fecha_nacimiento' => $_POST['fecha_nacimiento']
-        ];
-        $students[] = $newStudent;
-        // En un escenario real, esto se guardaría en la base de datos
-    }
-
-    if ($action === 'edit') {
-        // Lógica de edición de estudiante (simulada)
-        $id = intval($_POST['id']);
-        foreach ($students as &$student) {
-            if ($student['id'] === $id) {
-                $student['nombre'] = $_POST['nombre'];
-                $student['apellido'] = $_POST['apellido'];
-                $student['email'] = $_POST['email'];
-                $student['carrera'] = $_POST['carrera'];
-                $student['fecha_nacimiento'] = $_POST['fecha_nacimiento'];
-                break;
-            }
-        }
-        // En un escenario real, esto se actualizaría en la base de datos
-    }
-
-    // Redirigir para prevenir reenvío de formulario
-    header('Location: ?action=list');
-    exit();
-}
-
 // Determinar la acción actual
 $action = $_GET['action'] ?? 'list';
 
-// Lógica de eliminación (simulada)
-if ($action === 'delete' && isset($_GET['id'])) {
-    $id = intval($_GET['id']);
-    $students = array_filter($students, function ($student) use ($id) {
-        return $student['id'] !== $id;
-    });
-    // En un escenario real, esto se eliminaría de la base de datos
-    header('Location: ?action=list');
-    exit();
-}
-
-// Seleccionar estudiante para edición
-$editStudent = null;
-if ($action === 'edit' && isset($_GET['id'])) {
-    $id = intval($_GET['id']);
-    $editStudent = array_filter($students, function ($student) use ($id) {
-        return $student['id'] === $id;
-    });
-    $editStudent = reset($editStudent);
-}
+// Obtener estudiantes desde la base de datos
+$students = getStudents($conn);
 ?>
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Gestión de Estudiantes</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-
-<body class="bg-gray-100 min-h-screen">
-    <div class="container mx-auto p-6">
-        <?php if ($action === 'list'): ?>
-            <!-- Vista de Lista de Estudiantes -->
-            <div class="bg-white shadow-md rounded-lg">
-                <div class="flex justify-between items-center bg-blue-500 text-white p-4">
-                    <h1 class="text-2xl font-bold">Lista de Estudiantes</h1>
-                    <div class="space-x-2">
-                        <a href="?action=create" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded">
-                            + Agregar Estudiante
-                        </a>
-                        <a href="?action=reports" class="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded">
-                            Generar Reportes
-                        </a>
-                    </div>
-                </div>
-
-                <table class="w-full">
-                    <thead class="bg-gray-200">
-                        <tr>
-                            <th class="px-4 py-2 text-left">ID</th>
-                            <th class="px-4 py-2 text-left">Nombre</th>
-                            <th class="px-4 py-2 text-left">Apellido</th>
-                            <th class="px-4 py-2 text-left">Email</th>
-                            <th class="px-4 py-2 text-left">Carrera</th>
-                            <th class="px-4 py-2 text-center">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($students as $student): ?>
-                            <tr class="border-b hover:bg-gray-50">
-                                <td class="px-4 py-2"><?= $student['id'] ?></td>
-                                <td class="px-4 py-2"><?= $student['nombre'] ?></td>
-                                <td class="px-4 py-2"><?= $student['apellido'] ?></td>
-                                <td class="px-4 py-2"><?= $student['email'] ?></td>
-                                <td class="px-4 py-2"><?= $student['carrera'] ?></td>
-                                <td class="px-4 py-2 text-center">
-                                    <div class="flex justify-center space-x-2">
-                                        <a href="?action=edit&id=<?= $student['id'] ?>"
-                                            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
-                                            Editar
-                                        </a>
-                                        <a href="?action=delete&id=<?= $student['id'] ?>"
-                                            onclick="return confirm('¿Estás seguro?')"
-                                            class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
-                                            Eliminar
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+<div class="container mx-auto px-6">
+    <?php if (isset($_SESSION['mensaje'])) { ?>
+        <div id="alert-border-<?= $_SESSION['alert'] ?>"
+            class="flex items-center p-4 mb-4 text-<?= $_SESSION['color'] ?>-800 border-t-4 border-<?= $_SESSION['color'] ?>-300 bg-<?= $_SESSION['color'] ?>-50 dark:text-<?= $_SESSION['color'] ?>-400 dark:bg-gray-100 dark:border-<?= $_SESSION['color'] ?>-500"
+            role="alert">
+            <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                viewBox="0 0 20 20">
+                <path
+                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+            </svg>
+            <div class="ms-3 text-sm font-medium">
+                <?= $_SESSION['mensaje']; ?>
             </div>
-
-        <?php elseif ($action === 'create'): ?>
-            <!-- Formulario de Creación de Estudiante -->
-            <div class="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
-                <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">Nuevo Estudiante</h2>
-                <form method="POST" class="space-y-4">
-                    <div>
-                        <label class="block text-gray-700 font-bold mb-2">Nombre</label>
-                        <input type="text" name="nombre" required
-                            class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-bold mb-2">Apellido</label>
-                        <input type="text" name="apellido" required
-                            class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-bold mb-2">Email</label>
-                        <input type="email" name="email" required
-                            class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-bold mb-2">Fecha de Nacimiento</label>
-                        <input type="date" name="fecha_nacimiento" required
-                            class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-bold mb-2">Carrera</label>
-                        <select name="carrera" required
-                            class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">Seleccionar Carrera</option>
-                            <option value="Sistemas">Ingeniería de Sistemas</option>
-                            <option value="Derecho">Derecho</option>
-                            <option value="Medicina">Medicina</option>
-                            <option value="Administración">Administración</option>
-                        </select>
-                    </div>
-                    <div class="flex justify-between">
-                        <a href="?action=list" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
-                            Cancelar
-                        </a>
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                            Guardar
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-        <?php elseif ($action === 'edit'): ?>
-            <!-- Formulario de Edición de Estudiante -->
-            <div class="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
-                <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">Editar Estudiante</h2>
-                <form method="POST" class="space-y-4">
-                    <input type="hidden" name="id" value="<?= $editStudent['id'] ?>">
-                    <div>
-                        <label class="block text-gray-700 font-bold mb-2">Nombre</label>
-                        <input type="text" name="nombre" required
-                            value="<?= $editStudent['nombre'] ?>"
-                            class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-bold mb-2">Apellido</label>
-                        <input type="text" name="apellido" required
-                            value="<?= $editStudent['apellido'] ?>"
-                            class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-bold mb-2">Email</label>
-                        <input type="email" name="email" required
-                            value="<?= $editStudent['email'] ?>"
-                            class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-bold mb-2">Fecha de Nacimiento</label>
-                        <input type="date" name="fecha_nacimiento" required
-                            value="<?= $editStudent['fecha_nacimiento'] ?>"
-                            class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700 font-bold mb-2">Carrera</label>
-                        <select name="carrera" required
-                            class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="Sistemas" <?= $editStudent['carrera'] == 'Sistemas' ? 'selected' : '' ?>>
-                                Ingeniería de Sistemas
-                            </option>
-                            <option value="Derecho" <?= $editStudent['carrera'] == 'Derecho' ? 'selected' : '' ?>>
-                                Derecho
-                            </option>
-                            <option value="Medicina" <?= $editStudent['carrera'] == 'Medicina' ? 'selected' : '' ?>>
-                                Medicina
-                            </option>
-                            <option value="Administración" <?= $editStudent['carrera'] == 'Administración' ? 'selected' : '' ?>>
-                                Administración
-                            </option>
-                        </select>
-                    </div>
-                    <div class="flex justify-between">
-                        <a href="?action=list" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
-                            Cancelar
-                        </a>
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                            Actualizar
-                        </button>
-                    </div>
-
-                </form>
-            </div>
-
-        <?php elseif ($action === 'reports'): ?>
-            <!-- Vista de Reportes -->
-            <div class="bg-white shadow-md rounded-lg p-6">
-                <h2 class="text-2xl font-bold mb-6 text-center text-purple-600">Reportes</h2>
-
-                <?php
-                $academicReport = generateAcademicReport($students);
-                $administrativeReport = generateAdministrativeReport($students);
-                ?>
-
-                <div class="mb-6">
-                    <h3 class="text-xl font-bold mb-4">Reporte Académico</h3>
-                    <ul class="list-disc pl-6">
-                        <li>Total de Estudiantes: <?= $academicReport['total_students'] ?></li>
-                        <li>Edad Promedio: <?= $academicReport['average_age'] ?> años</li>
-                        <li>Distribución de Carreras:</li>
-                        <ul class="pl-6">
-                            <?php foreach ($academicReport['career_distribution'] as $career => $count): ?>
-                                <li><?= $career ?>: <?= $count ?> estudiantes</li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="mb-6">
-                    <h3 class="text-xl font-bold mb-4">Reporte Administrativo</h3>
-                    <ul class="list-disc pl-6">
-                        <li>Distribución por Rangos de Edad:</li>
-                        <ul class="pl-6">
-                            <?php foreach ($administrativeReport['age_distribution'] as $range => $count): ?>
-                                <li><?= $range ?>: <?= $count ?> estudiantes</li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </ul>
-                </div>
-
-                <div class="text-center">
-                    <a href="?action=list" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                        Volver a la Lista
+            <button type="button"
+                class="ms-auto -mx-1.5 -my-1.5 bg-white bg-opacity-80 text-<?= $_SESSION['color'] ?>-500 rounded-lg focus:ring-2 focus:ring-<?= $_SESSION['color'] ?>-400 p-1.5 hover:bg-<?= $_SESSION['color'] ?>-200 inline-flex items-center justify-center h-8 w-8 dark:bg-gray-100 dark:text-<?= $_SESSION['color'] ?>-400 dark:hover:bg-gray-200"
+                data-dismiss-target="#alert-border-<?= $_SESSION['alert'] ?>" aria-label="Close">
+                <span class="sr-only">Dismiss</span>
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                </svg>
+            </button>
+        </div>
+        <?php unset($_SESSION['mensaje']);
+    } ?>
+</div>
+<div class="container mx-auto p-6">
+    <?php if ($action === 'list'): ?>
+        <!-- Vista de Lista de Estudiantes -->
+        <div class="bg-white shadow-md rounded-lg">
+            <div class="flex justify-between items-center bg-blue-500 text-white p-4">
+                <h1 class="text-2xl font-bold">Lista de Estudiantes</h1>
+                <div class="space-x-2">
+                    <a href="?action=reports" class="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded">
+                        Generar Reportes
                     </a>
                 </div>
             </div>
-        <?php endif; ?>
-    </div>
-</body>
 
+            <table class="w-full">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="px-4 py-2 text-left">ID</th>
+                        <th class="px-4 py-2 text-left">Nombre</th>
+                        <th class="px-4 py-2 text-left">Apellido</th>
+                        <th class="px-4 py-2 text-left">Email</th>
+                        <th class="px-4 py-2 text-left">Telefono</th>
+                        <th class="px-4 py-2 text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($students as $student): ?>
+                        <tr class="border-b hover:bg-gray-50">
+                            <td class="px-4 py-2"><?= $student['Id_Estudiantes'] ?></td>
+                            <td class="px-4 py-2"><?= $student['Nombre_Estudiantes'] ?></td>
+                            <td class="px-4 py-2"><?= $student['Apellido_Estudiantes'] ?></td>
+                            <td class="px-4 py-2"><?= $student['Correo_Estudiantes'] ?></td>
+                            <td class="px-4 py-2"><?= $student['Telefono_Estudiantes'] ?></td>
+                            <td class="px-4 py-2 text-center">
+                                <div class="flex justify-center space-x-2">
+                                    <a href="<?= BASE_URL ?>src/Estudiantes/delete_task.php?id=<?= $student['Id_Estudiantes'] ?>&page=reporte"
+                                       onclick="return confirm('¿Estás seguro?')"
+                                       class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                                        Eliminar
+                                    </a>
+                                </div> 
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php elseif ($action === 'reports'): ?>
+        <!-- Vista de Reportes -->
+        <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="text-2xl font-bold mb-6 text-center text-purple-600">Reportes</h2>
+
+            <?php
+            $academicReport = generateAcademicReport($students);
+            $administrativeReport = generateAdministrativeReport($students);
+            ?>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-4">Reporte Académico</h3>
+                <ul class="list-disc pl-6">
+                    <li>Total de Estudiantes: <?= $academicReport['total_students'] ?></li>
+                    <li>Edad Promedio: <?= $academicReport['average_age'] ?> años</li>
+                    <li>Distribución de Carreras:</li>
+                    <ul class="pl-6">
+                        <?php foreach ($academicReport['career_distribution'] as $career => $count): ?>
+                            <li><?= $career ?>: <?= $count ?> estudiantes</li>
+                        <?php endforeach; ?>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="mb-6">
+                <h3 class="text-xl font-bold mb-4">Reporte Administrativo</h3>
+                <ul class="list-disc pl-6">
+                    <li>Distribución por Rangos de Edad:</li>
+                    <ul class="pl-6">
+                        <?php foreach ($administrativeReport['age_distribution'] as $range => $count): ?>
+                            <li><?= $range ?>: <?= $count ?> estudiantes</li>
+                        <?php endforeach; ?>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="text-center">
+                <a href="?action=list" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    Volver a la Lista
+                </a>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
+</body>
 </html>

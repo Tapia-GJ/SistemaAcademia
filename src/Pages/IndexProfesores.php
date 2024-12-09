@@ -1,9 +1,9 @@
 <?php
 
-if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 2) {
-    header('Location: ../../index.php');
-    exit;
-}
+// if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 2) {
+//     header('Location: ../../index.php');
+//     exit;
+// }
 ?>
 
 

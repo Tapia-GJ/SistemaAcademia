@@ -1,9 +1,10 @@
 <?php
-include "Config/db.php";
-if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 1) {
-    header('Location: ../../index.php');
-    exit;
-}
+include "../../Config/db.php";
+include "includes/headerAdmin.php";
+// if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 1) {
+//     header('Location: ../../index.php');
+//     exit;
+// }
 ?>
     <!-- Hero Section -->
     <section class="container mx-auto mt-10 px-4">

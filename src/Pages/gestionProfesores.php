@@ -1,5 +1,7 @@
 
 <?php
+include("../../config/db.php");
+include("includes/headerAdmin.php");
 // Configuración de base de datos y lógica (simulada para el ejemplo)
 $professors = [
     ['id' => 1, 'nombre' => 'Carlos', 'apellido' => 'Méndez', 'email' => 'carlos@example.com', 'telefono' => '+12 34 5678 9012', 'especialidad' => 'Matemáticas', 'fecha_contratacion' => '2015-08-12'],
@@ -10,40 +12,6 @@ $professors = [
 // Determinar la acción actual
 $action = $_GET['action'] ?? 'list';
 ?>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Gestión de Profesores - Academia Excelencia</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'academia-blue': '#1E40AF',
-                        'academia-light': '#3B82F6',
-                    }
-                }
-            }
-        }
-    </script>
-</head>
-<body class="bg-gray-100 min-h-screen">
-
-
-<nav class="bg-academia-blue text-white p-4 shadow-md">
-        <div class="container mx-auto flex justify-between items-center">
-            <div class="text-2xl font-bold">
-                Academia Excelencia
-            </div>
-            <div class="space-x-4">
-                <a href="/pages/IndexAdmi.php" class="hover:bg-academia-light px-3 py-2 rounded transition">
-                    Inicio 
-                </a>
-            </div>
-        </div>
-    </nav>
 
     <?php if ($action === 'list'): ?>
         <!-- Encabezado -->
