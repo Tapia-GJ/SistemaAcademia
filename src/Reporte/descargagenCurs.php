@@ -121,40 +121,6 @@ $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'colo
 
     $html .= '</tbody></table>';
 
-
-    $query = "SELECT *, t2.*, t3.* FROM `cursos` as t1 LEFT JOIN profesores_cursos as t2 on t1.Id_Cursos=t2.Cursos_Id_Cursos left JOIN profesores as t3 on  t2.Profesores_Id_Profesores = t3.Id_Profesores;";
-    $result = mysqli_query($conn, $query);
-
-    if (!$result) {
-        die('Error en la consulta: ' . mysqli_error($conn));
-    }
-
-    $profcurs = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-    if (empty($profcurs)) {
-        die('No se encontraron profesores.');
-    }
-
-    // Crear contenido HTML para el PDF
-    $html = '<h1>Reporte de Cursos</h1>';
-    $html .= '<table border="1" cellpadding="4">';
-    $html .= '<thead>
-                <tr style="background-color:#f2f2f2;">
-                    <th><b>Profesor</b></th>
-                    <th><b>Curso que imparte</b></th>
-                </tr>
-              </thead>';
-    $html .= '<tbody>';
-
-    foreach ($profcurs as $profcurs) {
-        $html .= '<tr>';
-        $html .= '<td>' . htmlspecialchars($profcurs['Profesores_Id_Profesores']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($profcurs['Cursos_Id_Cursos']) . '</td>';
-        $html .= '</tr>';
-    }
-
-    $html .= '</tbody></table>';
-
 // Print text using writeHTMLCell()
 $pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
