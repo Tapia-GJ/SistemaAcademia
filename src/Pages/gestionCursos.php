@@ -38,6 +38,10 @@ $redireccionar = $_GET['redireccionar'] ?? 'list';
             <div class="flex justify-between items-center bg-blue-500 text-white p-4">
                 <h1 class="text-2xl font-bold">Lista de Cursos</h1>
                 <div>
+                    <a href="/src/Reporte/descargagenCurs.php?type=pdf" 
+                        class="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded">
+                        Reporte General
+                    </a>
                     <a href="?redireccionar=createCurso" class="bg-blue-500 hover:bg-blue-600 px-2 py-2 rounded">
                         + Agregar Curso
                     </a>

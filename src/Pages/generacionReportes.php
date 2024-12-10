@@ -105,45 +105,54 @@ $students = getStudents($conn);
             <div class="flex justify-between items-center bg-blue-500 text-white p-4">
                 <h1 class="text-2xl font-bold">Lista de Estudiantes</h1>
                 <div class="space-x-2">
-                    <a href="?action=reports" class="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded">
-                        Generar Reportes
-                    </a>
+                <a href="/src/Reporte/descargagen.php?type=pdf" 
+                    class="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded">
+                    Reporte General
+                </a>
+
                 </div>
             </div>
 
             <table class="w-full">
-                <thead class="bg-gray-200">
-                    <tr>
-                        <th class="px-4 py-2 text-left">ID</th>
-                        <th class="px-4 py-2 text-left">Nombre</th>
-                        <th class="px-4 py-2 text-left">Apellido</th>
-                        <th class="px-4 py-2 text-left">Email</th>
-                        <th class="px-4 py-2 text-left">Telefono</th>
-                        <th class="px-4 py-2 text-center">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($students as $student): ?>
-                        <tr class="border-b hover:bg-gray-50">
-                            <td class="px-4 py-2"><?= $student['Id_Estudiantes'] ?></td>
-                            <td class="px-4 py-2"><?= $student['Nombre_Estudiantes'] ?></td>
-                            <td class="px-4 py-2"><?= $student['Apellido_Estudiantes'] ?></td>
-                            <td class="px-4 py-2"><?= $student['Correo_Estudiantes'] ?></td>
-                            <td class="px-4 py-2"><?= $student['Telefono_Estudiantes'] ?></td>
-                            <td class="px-4 py-2 text-center">
-                                <div class="flex justify-center space-x-2">
-                                    <a href="<?= BASE_URL ?>src/Estudiantes/delete_task.php?id=<?= $student['Id_Estudiantes'] ?>&page=reporte"
-                                       onclick="return confirm('¿Estás seguro?')"
-                                       class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
-                                        Eliminar
-                                    </a>
-                                </div> 
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
+    <thead class="bg-gray-200">
+        <tr>
+            <th class="px-4 py-2 text-left">ID</th>
+            <th class="px-4 py-2 text-left">Nombre</th>
+            <th class="px-4 py-2 text-left">Apellido</th>
+            <th class="px-4 py-2 text-left">Email</th>
+            <th class="px-4 py-2 text-left">Teléfono</th>
+            <th class="px-4 py-2 text-center">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($students as $student): ?>
+            <tr class="border-b hover:bg-gray-50">
+                <td class="px-4 py-2"><?= htmlspecialchars($student['Id_Estudiantes']) ?></td>
+                <td class="px-4 py-2"><?= htmlspecialchars($student['Nombre_Estudiantes']) ?></td>
+                <td class="px-4 py-2"><?= htmlspecialchars($student['Apellido_Estudiantes']) ?></td>
+                <td class="px-4 py-2"><?= htmlspecialchars($student['Correo_Estudiantes']) ?></td>
+                <td class="px-4 py-2"><?= htmlspecialchars($student['Telefono_Estudiantes']) ?></td>
+                <td class="px-4 py-2 text-center">
+                    <div class="flex justify-center space-x-2">
+                        <!-- Botón Eliminar -->
+                        <a href="<?= BASE_URL ?>src/Estudiantes/delete_task.php?id=<?= $student['Id_Estudiantes'] ?>&page=reporte"
+                           onclick="return confirm('¿Estás seguro?')"
+                           class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+                            Eliminar
+                        </a>
+                        <!-- Botón Generar PDF -->
+                        <a href="/src/Reporte/descarga.php?type=pdf&id=<?= $student['Id_Estudiantes'] ?>"
+                           class="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded">
+                            Generar Reporte PDF
+                        </a>
+                    </div> 
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+
     <?php elseif ($action === 'reports'): ?>
         <!-- Vista de Reportes -->
         <div class="bg-white shadow-md rounded-lg p-6">

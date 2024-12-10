@@ -39,6 +39,10 @@ $action = $_GET['action'] ?? 'list';
         <div>
             <div class="flex justify-between items-center bg-blue-500 text-white p-4">
                 <h1 class="text-2xl font-bold">Lista de Profesores</h1>
+                <a href="/src/Reporte/descargagenProf.php?type=pdf" 
+                    class="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded">
+                    Reporte General
+                </a>
                 <a href="?action=create" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded">
                     + Agregar Profesor
                 </a>

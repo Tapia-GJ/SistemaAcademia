@@ -57,7 +57,7 @@ $action = $_GET['action'] ?? 'list_grades';
                             <th class="px-4 py-2 text-left">Estudiante</th>
                             <th class="px-4 py-2 text-left">Nota Final</th>
                             <th class="px-4 py-2 text-left">Estatus</th>
-                            <th class="px-4 py-2 text-left">Acciones</th>
+                            <th class="px-4 py-2 text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>

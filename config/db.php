@@ -6,7 +6,7 @@ $conn = mysqli_connect(
     "localhost",
     "root",
     "",
-    "sistemaescolar"
+    "sistemaescolarnew"
 );
 
 if (!$conn) {
