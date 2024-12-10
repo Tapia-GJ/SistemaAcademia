@@ -6,8 +6,13 @@ include "includes/headerAlum.php";
     <section class="container mx-auto mt-10 px-4">
         <div class="grid md:grid-cols-2 gap-8 items-center">
             <div>
+                <?php $user = $_SESSION["username"];
+                $query = "SELECT t1.*, t2.* FROM `usuarios` as t1 INNER JOIN estudiantes as t2 ON t1.Estudiantes_Id = t2.Id_Estudiantes WHERE t1.Nombre_Usuarios = '$user'";
+                $result = mysqli_query($conn, $query);
+                $row = mysqli_fetch_array($result);
+                ?>
                 <h1 class="text-4xl font-bold text-academia-blue mb-4">
-                    Bienvenido #####
+                    Bienvenido <?= $row["Nombre_Estudiantes"] ." " . $row["Apellido_Estudiantes"] ?>
                 </h1>
                 <p class="text-gray-700 mb-6">
                 ¡Bienvenidos a su plataforma de calificaciones escolares! Aquí podrán consultar su progreso académico, mantenerse informados y alcanzar sus metas con éxito. ¡El futuro está en sus manos!
