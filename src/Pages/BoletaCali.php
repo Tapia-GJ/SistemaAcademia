@@ -18,8 +18,9 @@ include "includes/headerAlum.php";
                         </tr>
                     </thead>
                     <tbody>
-                        <?php 
-                        $query = "SELECT t1.*, t2.*, t3.*, t4.Nombre_Cursos FROM usuarios as t1 INNER JOIN estudiantes as t2 on t1.Estudiantes_Id = t2.Id_Estudiantes INNER JOIN calificaciones as t3 on t2.Id_Estudiantes = t3.Estudiantes_Id_Estudiantes INNER JOIN cursos as t4 on t4.Id_Cursos = t3.Cursos_Id_Cursos WHERE t1.Nombre_Usuarios = 'alum';";
+                        <?php  
+                        $user = $_SESSION["username"];
+                        $query = "SELECT t1.*, t2.*, t3.*, t4.Nombre_Cursos FROM usuarios as t1 INNER JOIN estudiantes as t2 on t1.Estudiantes_Id = t2.Id_Estudiantes INNER JOIN calificaciones as t3 on t2.Id_Estudiantes = t3.Estudiantes_Id_Estudiantes INNER JOIN cursos as t4 on t4.Id_Cursos = t3.Cursos_Id_Cursos WHERE t1.Nombre_Usuarios = '$user';";
                         $result = mysqli_query($conn, $query);
                         
                         foreach ($result as $fila): 
