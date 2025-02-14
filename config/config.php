@@ -1,4 +1,4 @@
 <?php
-define('BASE_URL', 'academiasistema.netlify.app/');
+define('BASE_URL', '/');
 
 ?>
