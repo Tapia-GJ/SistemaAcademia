@@ -28,7 +28,7 @@ $redireccionar = $_GET['redireccionar'] ?? 'list';
                 </svg>
             </button>
         </div>
-        <?php unset($_SESSION['mensaje']);
+    <?php unset($_SESSION['mensaje']);
     } ?>
 </div>
 <div class="container mx-auto p-6">
@@ -38,10 +38,6 @@ $redireccionar = $_GET['redireccionar'] ?? 'list';
             <div class="flex justify-between items-center bg-blue-500 text-white p-4">
                 <h1 class="text-2xl font-bold">Lista de Cursos</h1>
                 <div>
-                    <a href="/src/Reporte/descargagenCurs.php?type=pdf" 
-                        class="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded">
-                        Reporte General
-                    </a>
                     <a href="?redireccionar=createCurso" class="bg-blue-500 hover:bg-blue-600 px-2 py-2 rounded">
                         + Agregar Curso
                     </a>
@@ -66,7 +62,7 @@ $redireccionar = $_GET['redireccionar'] ?? 'list';
                     $query = "SELECT * FROM `cursos`;";
                     $result = mysqli_query($conn, $query);
                     foreach ($result as $course):
-                        ?>
+                    ?>
                         <tr class="border-b hover:bg-gray-50">
                             <td class="px-4 py-2"><?= $course['Id_Cursos'] ?></td>
                             <td class="px-4 py-2"><?= $course['Nombre_Cursos'] ?></td>
@@ -74,7 +70,7 @@ $redireccionar = $_GET['redireccionar'] ?? 'list';
                             <td class="px-4 py-2"><?= $course['Creditos'] ?></td>
                             <td class="px-4 py-2 text-center">
                                 <div class="flex justify-center space-x-2">
-                                    <a href="?redireccionar=editCursoProfe&id=<?= $course['Id_Cursos'] ?>"
+                                    <a href="?redireccionar=editCurso&id=<?= $course['Id_Cursos'] ?>"
                                         class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
                                         Editar
                                     </a>
@@ -93,6 +89,10 @@ $redireccionar = $_GET['redireccionar'] ?? 'list';
         <div class="bg-white shadow-md rounded-lg mt-6">
             <div class="flex justify-between items-center bg-blue-500 text-white p-4">
                 <h1 class="text-2xl font-bold">Lista de Cursos impartidos por profesores</h1>
+                <a href="/src/Reporte/descargagenCurs.php?type=pdf" 
+                    class="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded">
+                    Reporte General
+                </a>
                 <div>
                     <a href="?redireccionar=createCursoProfe" class="bg-blue-500 hover:bg-blue-600 px-2 py-2 rounded">
                         + Agregar Profesor a un Curso
@@ -106,6 +106,7 @@ $redireccionar = $_GET['redireccionar'] ?? 'list';
                     <tr>
                         <th class="px-4 py-2 text-left">Curso</th>
                         <th class="px-4 py-2 text-left">Profesor</th>
+                        <th class="px-4 py-2 text-left">Horario</th>
                         <th class="px-4 py-2 text-center">Acciones</th>
                     </tr>
                 </thead>
@@ -115,10 +116,11 @@ $redireccionar = $_GET['redireccionar'] ?? 'list';
                     //$query = "SELECT * FROM `cursos`;";
                     $result = mysqli_query($conn, $query);
                     foreach ($result as $course):
-                        ?>
+                    ?>
                         <tr class="border-b hover:bg-gray-50">
                             <td class="px-4 py-2"><?= $course['Nombre_Cursos'] ?></td>
                             <td class="px-4 py-2"><?= $course['Nombre_Profesores'] . " " . $course['Apellido_Profesores'] ?></td>
+                            <td class="px-4 py-2"><?= (isset($course['Horario_Inicio']) ? $course['Horario_Inicio'] : '--:--') . ' - '  . (isset($course['Horario_Fin']) ? $course['Horario_Fin'] : '--:--')  ?></td>
                             <td class="px-4 py-2 text-center">
                                 <div class="flex justify-center space-x-2">
                                     <a href="?redireccionar=editCursoProfe&id_Curso=<?= $course['Id_Cursos'] ?>&id_Profe=<?= $course['Id_Profesores'] ?>"
@@ -184,9 +186,12 @@ $redireccionar = $_GET['redireccionar'] ?? 'list';
             </form>
         </div>
 
+
+
     <?php elseif ($redireccionar === 'editCurso'): ?>
         <!-- Formulario de Edición de Curso -->
         <?php
+
         $id = $_GET['id'];
         $query = "SELECT * FROM cursos WHERE Id_Cursos = $id";
         $result = mysqli_query($conn, $query);
@@ -232,7 +237,7 @@ $redireccionar = $_GET['redireccionar'] ?? 'list';
         <div class="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
             <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">Agregar Profesor a un curso</h2>
             <form method="POST" action="<?php echo BASE_URL; ?>src/Cursos/saveCurso.php" class="space-y-4">
-                <div>
+                <div class="flex flex-col space-y-4">
 
                     <label class="block text-gray-700 font-bold mb-2">Curso</label>
                     <select name="Curso" required
@@ -243,7 +248,7 @@ $redireccionar = $_GET['redireccionar'] ?? 'list';
                         $result = mysqli_query($conn, $query);
                         foreach ($result as $course):
                         ?>
-                        <option value="<?=$course['Id_Cursos']?>"><?=$course['Nombre_Cursos']?></option>
+                            <option value="<?= $course['Id_Cursos'] ?>"><?= $course['Nombre_Cursos'] ?></option>
                         <?php endforeach; ?>
                     </select>
                     <label class="block text-gray-700 font-bold mb-2">Profesor</label>
@@ -255,9 +260,18 @@ $redireccionar = $_GET['redireccionar'] ?? 'list';
                         $result = mysqli_query($conn, $query);
                         foreach ($result as $course):
                         ?>
-                        <option value="<?=$course['Id_Profesores']?>"><?=$course['Nombre_Profesores']?></option>
+                            <option value="<?= $course['Id_Profesores'] ?>"><?= $course['Nombre_Profesores'] ?></option>
                         <?php endforeach; ?>
                     </select>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2">Horario</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <input type="time" name="horario_inicio" required value="00:00"
+                                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <input type="time" name="horario_fin" required value="00:00"
+                                class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
                 </div>
                 <div class="flex justify-between">
                     <a href="?redireccionar=list" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
@@ -283,51 +297,60 @@ $redireccionar = $_GET['redireccionar'] ?? 'list';
                 Volver
             </a>
         <?php else: ?>
-        <div class="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
-            <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">Editar Profesor de un curso</h2>
-            <form method="POST" action="<?php echo BASE_URL; ?>src/Cursos/editCurso.php" class="space-y-4">
-            <input type="hidden" name="profeAnterior" value="<?= $curso['Profesores_Id_Profesores'] ?>" >
-            <input type="hidden" name="cursoAnterior" value="<?= $curso['Cursos_Id_Cursos'] ?>" >
-                <div>
+            <div class="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
+                <h2 class="text-2xl font-bold mb-6 text-center text-blue-600">Editar Profesor de un curso</h2>
+                <form method="POST" action="<?php echo BASE_URL; ?>src/Cursos/editCurso.php" class="space-y-4">
+                    <input type="hidden" name="profeAnterior" value="<?= $curso['Profesores_Id_Profesores'] ?>">
+                    <input type="hidden" name="cursoAnterior" value="<?= $curso['Cursos_Id_Cursos'] ?>">
+                    <div>
 
-                    <label class="block text-gray-700 font-bold mb-2">Curso</label>
-                    
+                        <label class="block text-gray-700 font-bold mb-2">Curso</label>
 
-                    <select name="Curso" required
-                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-                        <option value="<?= $curso['Cursos_Id_Cursos'] ?>"><?= $curso['Nombre_Cursos'] ?></option>
-                        <?php
-                        $query = "SELECT * FROM `cursos`";
-                        $result = mysqli_query($conn, $query);
-                        foreach ($result as $course):
-                        ?>
-                        <option value="<?=$course['Id_Cursos']?>"><?=$course['Nombre_Cursos']?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <label class="block text-gray-700 font-bold mb-2">Profesor</label>
-                    <select name="profesor" required
-                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-                        <option value="<?= $curso['Profesores_Id_Profesores'] ?>"><?= $curso['Nombre_Profesores'] . " " . $curso['Apellido_Profesores'] ?></option>
-                        <?php
-                        $query = "SELECT * FROM `profesores`";
-                        $result = mysqli_query($conn, $query);
-                        foreach ($result as $course):
-                        ?>
-                        <option value="<?=$course['Id_Profesores']?>"><?=$course['Nombre_Profesores']?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-                <div class="flex justify-between">
-                    <a href="?redireccionar=list" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
-                        Cancelar
-                    </a>
-                    <button type="submit" name="editCursoProfe"
-                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                        Guardar
-                    </button>
-                </div>
-            </form>
-        </div>
+
+                        <select name="Curso" required
+                            class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <option value="<?= $curso['Cursos_Id_Cursos'] ?>"><?= $curso['Nombre_Cursos'] ?></option>
+                            <?php
+                            $query = "SELECT * FROM `cursos`";
+                            $result = mysqli_query($conn, $query);
+                            foreach ($result as $course):
+                            ?>
+                                <option value="<?= $course['Id_Cursos'] ?>"><?= $course['Nombre_Cursos'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <label class="block text-gray-700 font-bold mb-2">Profesor</label>
+                        <select name="profesor" required
+                            class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                            <option value="<?= $curso['Profesores_Id_Profesores'] ?>"><?= $curso['Nombre_Profesores'] . " " . $curso['Apellido_Profesores'] ?></option>
+                            <?php
+                            $query = "SELECT * FROM `profesores`";
+                            $result = mysqli_query($conn, $query);
+                            foreach ($result as $course):
+                            ?>
+                                <option value="<?= $course['Id_Profesores'] ?>"><?= $course['Nombre_Profesores'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2">Horario</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <input type="time" name="horario_inicio" required value="<?= (isset($curso['Horario_Inicio']) ? $curso['Horario_Inicio'] : '00:00') ?>"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <input type="time" name="horario_fin" required value="<?= (isset($curso['Horario_Fin']) ? $curso['Horario_Fin'] : '00:00') ?>"
+                                    class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex justify-between">
+                        <a href="?redireccionar=list" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                            Cancelar
+                        </a>
+                        <button type="submit" name="editCursoProfe"
+                            class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                            Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
         <?php endif; ?>
     <?php endif; ?>
 </div>

@@ -52,6 +52,9 @@
                 <a href="<?php echo BASE_URL; ?>src/Pages/gestionProfesores.php" class="hover:bg-academia-light px-2 py-2 rounded transition">
                     Gestión de profesores
                 </a>
+                <a href="<?php echo BASE_URL; ?>src/Pages/gestionUsuarios.php" class="hover:bg-academia-light text-center px-2 py-2 rounded transition">
+                    Gestión de Usuarios
+                </a>
                 <a href="<?php echo BASE_URL; ?>logout.php" class="hover:bg-academia-light px-3 py-2 rounded transition">
                     Cerrar sesión
                 </a>

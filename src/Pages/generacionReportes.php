@@ -105,7 +105,7 @@ $students = getStudents($conn);
             <div class="flex justify-between items-center bg-blue-500 text-white p-4">
                 <h1 class="text-2xl font-bold">Lista de Estudiantes</h1>
                 <div class="space-x-2">
-                <a href="/src/Reporte/descargagen.php?type=pdf" 
+                <a href="/src/Reporte/descargagen.php" 
                     class="bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded">
                     Reporte General
                 </a>
