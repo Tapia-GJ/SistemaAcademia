@@ -21,9 +21,14 @@ if(isset($_POST['saveCurso'])){
 }elseif (isset($_POST["saveCursoProfe"])){
     $idProfe = $_POST["profesor"];
     $idCurso = $_POST["Curso"]; 
+    $horario_inicio = $_POST["horario_inicio"];
+    $horario_fin = $_POST["horario_fin"];
+
+    // prevent SQL injection
+    // validar ids y horarios para evitar errores al insertar 
 
     try {
-        $query = "INSERT INTO profesores_cursos (Profesores_Id_Profesores, Cursos_Id_Cursos) VALUES ('$idProfe', '$idCurso')";
+        $query = "INSERT INTO profesores_cursos (Profesores_Id_Profesores, Cursos_Id_Cursos, Horario_Inicio, Horario_Fin) VALUES ('$idProfe', '$idCurso', '$horario_inicio', '$horario_fin')";
         $result = mysqli_query($conn, $query);
         
         if (!$result) {

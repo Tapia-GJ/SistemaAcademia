@@ -90,7 +90,7 @@ $action = $_GET['action'] ?? 'registro_asistencia';
                     <?php endforeach; ?>
                 </div>
             </div>
-            <button type="submit" name="saveAsisProfe" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            <button type="submit" name="saveAsis" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                 Registrar Asistencia
             </button>
         </form>
@@ -107,14 +107,18 @@ $action = $_GET['action'] ?? 'registro_asistencia';
                                 <th class="px-4 py-2 text-left">Curso</th>
                                 <th class="px-4 py-2 text-left">Estudiante</th>
                                 <th class="px-4 py-2 text-left">Estado</th>
+                                <th class="px-4 py-2 text-left">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                                 <?php 
-                                $query = "SELECT t1.*, t2.*, t3.* FROM asistencia as t1 INNER JOIN estudiantes as t2 on t1.Estudiantes_Id_Estudiantes = t2.Id_Estudiantes inner JOIN cursos as t3 on t1.Estudiantes_Id_Estudiantes = t3.Id_Cursos;";
+                                $query = "SELECT t1.*, t2.*, t3.* 
+                                          FROM asistencia as t1 
+                                          INNER JOIN estudiantes as t2 ON t1.Estudiantes_Id_Estudiantes = t2.Id_Estudiantes 
+                                          INNER JOIN cursos as t3 ON t1.Cursos_Id_Cursos = t3.Id_Cursos;";
                                 $result = mysqli_query($conn, $query);
                                 foreach ($result as $student):
-                                $estatus = $student['Presente'] == 1? 'Asistencia': 'N/A'; 
+                                $estatus = $student['Presente'] == 1 ? 'Asistencia' : 'Inasistencia'; 
                                 ?>
                                     <tr class="border-b hover:bg-gray-50">
                                         <td class="px-4 py-2"><?= $student['Fecha_Asistencia'] ?></td>
@@ -123,9 +127,15 @@ $action = $_GET['action'] ?? 'registro_asistencia';
                                             <?php echo $student['Nombre_Estudiantes'] . ' ' . $student['Apellido_Estudiantes']; ?>
                                         </td>
                                         <td class="px-4 py-2">
-                                            <span class="bg-green-100 text-green-800 px-2 py-1 rounded">
-                                                <?= $estatus?>
+                                            <span class="<?= $student['Presente'] == 1 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' ?> px-2 py-1 rounded">
+                                                <?= $estatus ?>
                                             </span>
+                                        </td>
+                                        <td>
+                                        <a href="?action=edit&id=<?= $fila['Id_Asistencia'] ?>"
+                                                class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                                                Editar
+                                            </a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

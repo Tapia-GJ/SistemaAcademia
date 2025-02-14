@@ -20,7 +20,7 @@
  */
 
 // Include the main TCPDF library (search for installation path).
-include('C:\Users\steph\OneDrive\Desktop\SistemaAcademia\SistemaAcademia\library\tcpdf.php');
+include('C:\xampp\htdocs\SistemaAcademia\library\tcpdf.php');
 include '../../config/db.php';
 
 
@@ -84,7 +84,7 @@ $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'colo
 
     
 // Set some content to print
-    $query = "SELECT * FROM cursos";
+    $query = "SELECT * FROM `cargaacademicaprofesores`";
     $result = mysqli_query($conn, $query);
 
     if (!$result) {
@@ -103,8 +103,9 @@ $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'colo
     $html .= '<thead>
                 <tr style="background-color:#f2f2f2;">
                     <th><b>ID</b></th>
-                    <th><b>Nombre</b></th>
-                    <th><b>Descripcion</b></th>
+                    <th><b>Nombre Profesor</b></th>
+                    <th><b>Apellido</b></th>
+                    <th><b>Nombre Curso </b></th>
                     <th><b>Créditos</b></th>
                 </tr>
               </thead>';
@@ -112,10 +113,11 @@ $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'colo
 
     foreach ($course as $course) {
         $html .= '<tr>';
-        $html .= '<td>' . htmlspecialchars($course['Id_Cursos']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($course['Nombre_Cursos']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($course['Descripcion']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($course['Creditos']) . '</td>';
+        $html .= '<td>' . htmlspecialchars($course['Id_profesores']) . '</td>';
+        $html .= '<td>' . htmlspecialchars($course['nombre_profesores']) . '</td>';
+        $html .= '<td>' . htmlspecialchars($course['apellido_profesores']) . '</td>';
+        $html .= '<td>' . htmlspecialchars($course['nombre_cursos']) . '</td>';
+        $html .= '<td>' . htmlspecialchars($course['creditos']) . '</td>';
         $html .= '</tr>';
     }
 

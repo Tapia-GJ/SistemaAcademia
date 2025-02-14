@@ -20,7 +20,7 @@
  */
 
 // Include the main TCPDF library (search for installation path).
-include('C:\Users\steph\OneDrive\Desktop\SistemaAcademia\SistemaAcademia\library\tcpdf.php');
+include('C:\xampp\htdocs\SistemaAcademia\library\tcpdf.php');
 include '../../config/db.php';
 
 
@@ -88,8 +88,9 @@ $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'colo
         die('ID no proporcionado.');
     }
 // Set some content to print
-    $query = "SELECT * FROM estudiantes WHERE id_estudiantes = $id";
+    $query = "SELECT * FROM `historialacademico` WHERE id_estudiantes = $id";
     $result = mysqli_query($conn, $query);
+
 
     if (!$result) {
         die('Error en la consulta: ' . mysqli_error($conn));
@@ -102,28 +103,28 @@ $pdf->setTextShadow(array('enabled'=>true, 'depth_w'=>0.2, 'depth_h'=>0.2, 'colo
     }
 
     // Crear contenido HTML para el PDF
-    $html = '<h1>Reporte de Estudiantes</h1>';
+    $html = '<h1>Reporte individual Estudiante</h1>';
     $html .= '<table border="1" cellpadding="4">';
     $html .= '<thead>
                 <tr style="background-color:#f2f2f2;">
                     <th><b>ID</b></th>
                     <th><b>Nombre</b></th>
                     <th><b>Apellido</b></th>
-                    <th><b>Correo</b></th>
-                    <th><b>Telefono</b></th>
-                    <th><b>Promedio</b></th>
+                    <th><b>Curso</b></th>
+                    <th><b>Calificación</b></th>
+                    <th><b>Fecha de calificaciones</b></th>
                 </tr>
               </thead>';
     $html .= '<tbody>';
 
     foreach ($students as $student) {
         $html .= '<tr>';
-        $html .= '<td>' . htmlspecialchars($student['Id_Estudiantes']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($student['Nombre_Estudiantes']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($student['Apellido_Estudiantes']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($student['Correo_Estudiantes']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($student['Telefono_Estudiantes']) . '</td>';
-        $html .= '<td>' . htmlspecialchars($student['promedio_calificaciones']) . '</td>';
+        $html .= '<td>' . htmlspecialchars($student['Id_estudiantes']) . '</td>';
+        $html .= '<td>' . htmlspecialchars($student['nombre_estudiantes']) . '</td>';
+        $html .= '<td>' . htmlspecialchars($student['apellido_estudiantes']) . '</td>';
+        $html .= '<td>' . htmlspecialchars($student['nombre_cursos']) . '</td>';
+        $html .= '<td>' . htmlspecialchars($student['calificacion']) . '</td>';
+        $html .= '<td>' . htmlspecialchars($student['fecha_calificaciones']) . '</td>';
         $html .= '</tr>';
     }
 
